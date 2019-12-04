@@ -47,21 +47,21 @@
     <title>ยืนยันการโอนเงิน</title>
 
     <!-- Custom fonts for this template-->
-    <link href="https://2jds.com/analytics/plugins/sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
-        type="text/css">
+    <link href="../plugins/sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet"> -->
     <!-- Custom styles for this template-->
-    <link href="https://2jds.com/analytics/plugins/sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../plugins/sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet">
     
-    <link href="https://2jds.com/analytics/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://2jds.com/analytics/css/datepicker3.css" rel="stylesheet" type="text/css" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/datepicker3.css" rel="stylesheet" type="text/css" />
     
+    <link href="<?php path_root ?>assets/css/timepicker.css" rel="stylesheet" type="text/css" />
 
-    <script src="https://2jds.com/analytics/plugins/sb-admin-2/vendor/jquery/jquery.min.js"></script>
-    <script src="https://2jds.com/analytics/js/bootstrap.min.js"></script>
-    <script src="https://2jds.com/analytics/js/bootstrap-datepicker.js"></script>
+    <script src="../plugins/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-datepicker.js"></script>
 
     <script>
         $(function () {
@@ -189,7 +189,7 @@
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </div>
 
-                                                <input id="timepicker" type="text" class="form-control" name="bank_transfer_time" style="margin-left: 10px;" value="" placeholder="hh:mm" required>
+                                                <input id="timepicker" type="text" class="form-control" name="bank_transfer_time"   required>         
                                                 <div class="input-group-addon">
                                                     <span class="glyphicon glyphicon-time"></span>
                                                 </div>
@@ -203,7 +203,7 @@
                                             </div>
                                         </form>
                                         <hr>
-
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -220,13 +220,24 @@
 
     <!-- Bootstrap core JavaScript-->
     
-    <script src="https://2jds.com/analytics/plugins/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../plugins/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="https://2jds.com/analytics/plugins/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../plugins/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="https://2jds.com/analytics//plugins/sb-admin-2/js/sb-admin-2.min.js"></script>
+    <script src="../plugins/sb-admin-2/js/sb-admin-2.min.js"></script>
+
+    <script type="text/javascript" src="<?php path_root ?>assets/js/bootstrap-timepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#timepicker').timepicker({
+                minuteStep: 1,
+                showMeridian: false,
+                defaultTime: 'current'
+            });
+        });
+    </script>
 
     <script>
     jQuery(function() {
