@@ -70,10 +70,10 @@ if(@$_POST && @$_POST['submit_form']=='send'){
     foreach($data as $val);
 
     $txt_msg_notify = "ขอบคุณสำหรับข้อมูล เจ้าหน้าที่จะแจ้งสรุปยอดสินค้า ให้ทราบอีกครั้งค่ะ"; 
-    //notify_to_customer_text_msg($txt_msg_notify, $line_userID);
+    notify_to_customer_text_msg($txt_msg_notify, $line_userID);
 
     $msg_noti_line_notify = "มีลูกค้าลงทะเบียนสั่งซื้อสินค้า ชื่อ: ".$line_displayName. "\n\n ลิงค์ยืนยัน https://analytics.2jds.com/line-liff-starter/confirm_order.php?order_id=".$val['ID']; 
-    //$res = line_notify_message($msg_noti_line_notify,ADMIN_LINE_NOTIFY_TOKEN_ID);
+    $res = line_notify_message($msg_noti_line_notify,ADMIN_LINE_NOTIFY_TOKEN_ID);
     
     // header('location:'.path_root.'?uri=webboard'); 
 
