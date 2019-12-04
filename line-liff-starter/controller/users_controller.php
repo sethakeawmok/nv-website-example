@@ -10,6 +10,11 @@ if(@$_POST && @$_POST['submit_form']=='send'){
 
     $line_userID = $_POST['hid_line_userID'];
     $line_displayName = $_POST['hid_line_displayName'];
+    $province = $_POST['sel_province']; 
+    $amphur = $_POST['sel_amphur'];
+    $district = $_POST['sel_district'];
+    $postcode = $_POST['postcode'];
+
     $data = $cls->getData('kb_user_line_bot','Line_userID='."'".$line_userID."'",'ID DESC');  
     $count_query = sizeof($data);
 
@@ -30,8 +35,10 @@ if(@$_POST && @$_POST['submit_form']=='send'){
         $val['LastName'] = $_POST['LastName']; 
         $val['PhoneNo'] = $_POST['PhoneNo'];
         $val['Address'] = $_POST['Address'];
+        $val['province_id'] = $province;
+        $val['amphur_id'] = $amphur;
+        $val['postcode'] = $postcode;
         $insert = $cls->InsertSQLTabel('kb_orders_log',$val);
-
         
     } else {
 
@@ -44,6 +51,10 @@ if(@$_POST && @$_POST['submit_form']=='send'){
         $val['LastName'] = $_POST['LastName']; 
         $val['PhoneNo'] = $_POST['PhoneNo'];
         $val['Address'] = $_POST['Address'];
+        $val['province_id'] = $province;
+        $val['amphur_id'] = $amphur;
+        $val['district_id'] = $district;
+        $val['postcode'] = $postcode;
 
         $insert = $cls->InsertSQLTabel('kb_orders_log',$val);
 
@@ -59,10 +70,10 @@ if(@$_POST && @$_POST['submit_form']=='send'){
     foreach($data as $val);
 
     $txt_msg_notify = "ขอบคุณสำหรับข้อมูล เจ้าหน้าที่จะแจ้งสรุปยอดสินค้า ให้ทราบอีกครั้งค่ะ"; 
-    notify_to_customer_text_msg($txt_msg_notify, $line_userID);
+    //notify_to_customer_text_msg($txt_msg_notify, $line_userID);
 
     $msg_noti_line_notify = "มีลูกค้าลงทะเบียนสั่งซื้อสินค้า ชื่อ: ".$line_displayName. "\n\n ลิงค์ยืนยัน https://analytics.2jds.com/line-liff-starter/confirm_order.php?order_id=".$val['ID']; 
-    $res = line_notify_message($msg_noti_line_notify,"JBcsNhwdUyawB8NrB7GvSwISJNHvz9pMKNmzWfUsnHE");
+    //$res = line_notify_message($msg_noti_line_notify,ADMIN_LINE_NOTIFY_TOKEN_ID);
     
     // header('location:'.path_root.'?uri=webboard'); 
 
@@ -128,6 +139,8 @@ if(@$_POST && @$_POST['submit_form']=='send'){
             ,"pd_total_price" => $pd_count_price );
 
         notify_to_customer($msg_pd_detail_arr, $msg_pd_total_arr, $line_userID);
+
+        echo "ส่งข้อมูลยืนยันให้ลูกค้าแล้ว !!!";
     }
 
     // header('location:'.path_root.'?uri=view_webboard&wb_id='.$_POST['wbid_poster']);    
@@ -135,15 +148,34 @@ if(@$_POST && @$_POST['submit_form']=='send'){
 
     $order_id = $_POST['orderID'];
     $bank_transfer_status =  $_POST['payment_status'];
+    $ems_no =  $_POST['ems_no'];
     $accept_line_notify =  $_POST['accept_line_notify'];
+    if ($bank_transfer_status != 'complate'){
+        $ems_no = '';
+    }
 
     $val = array();  
     $val['transfer_status'] = $bank_transfer_status;  
+    //$val['ems_no'] = $ems_no;
 
     $update = $cls->UpdateSQL('kb_orders_log',$val,'ID= '.$order_id);
     
     if ($accept_line_notify == 'yes'){
-        $res = line_notify_message("55555","JBcsNhwdUyawB8NrB7GvSwISJNHvz9pMKNmzWfUsnHE");
+        //$res = line_notify_message("55555",ADMIN_LINE_NOTIFY_TOKEN_ID);
+
+        $line_userID = '';
+        $data = $cls->getData_custom_qry("SELECT t1.FirstName,t2.Line_userID,t2.Line_displayName FROM kb_orders_log t1 INNER JOIN kb_user_line_bot t2 ON t1.user_line_bot_ID = t2.ID where t1.ID =".$order_id);
+        
+        foreach($data as $val);
+        $line_userID = $val['Line_userID'];
+
+        $msg_ems_no = '';
+        if ( !empty($ems_no) ){
+            $msg_ems_no = 'สามารถติดตามสินค้าได้จาก EMS No. : '.$ems_no;
+        }
+
+        $txt_msg_notify = "เจ้าหน้าที่ยืนยันการโอนเงินของคุณแล้ว ".$msg_ems_no; 
+        notify_to_customer_text_msg($txt_msg_notify, $line_userID);
     }
     
     $ajax_response = array( 'success' => true );
@@ -177,9 +209,9 @@ if(@$_POST && @$_POST['submit_form']=='send'){
     ธนาคาร : ".$bank_transfer."
     เลขบัญชี :  ".$bank_transfer_no."
     จำนวน : ".number_format($transfer_amount)."
-    วันเวลา : ".$bank_transfer_dt."\n\n ลิงค์ยืนยัน https://analytics.2jds.com/line-liff-starter/confirm_order.php?order_id=".$val['ID']; 
+    วันเวลา : ".$bank_transfer_dt."\n\n ยืนยันสถาะได้ที่ https://analytics.2jds.com/line-liff-starter/overview.php"; 
 
-    $res = line_notify_message($msg_noti_line_notify,"JBcsNhwdUyawB8NrB7GvSwISJNHvz9pMKNmzWfUsnHE");
+    $res = line_notify_message($msg_noti_line_notify,ADMIN_LINE_NOTIFY_TOKEN_ID);
 
     $line_userID = '';
     $data = $cls->getData_custom_qry("SELECT t2.Line_userID FROM kb_orders_log t1 INNER JOIN kb_user_line_bot t2 ON t1.user_line_bot_ID = t2.ID where t1.ID =".$order_id);

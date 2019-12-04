@@ -1,6 +1,6 @@
 <?php
 
-//require_once '../plugins/line-bot-sdk/bot_settings.php';
+require_once '../config/config_th.php';
 require_once '../plugins/line-bot-sdk/vendor/autoload.php';
 
 // use LINE\LINEBot;
@@ -164,7 +164,7 @@ function notify_to_customer($msg_pd_detail_arr, $msg_pd_total_arr, $line_userID)
             new BoxComponentBuilder(
                 "vertical",
                 array(
-                    new TextComponentBuilder("ยืนยันคำสั่งซื้อ  : ".$FirstName) 
+                    new TextComponentBuilder("แจ้งโอนเงิน  : ".$FirstName) 
                 )
             ),
            
@@ -180,7 +180,7 @@ function notify_to_customer($msg_pd_detail_arr, $msg_pd_total_arr, $line_userID)
                 "horizontal",
                 array(
                     new ButtonComponentBuilder(
-                        new UriTemplateActionBuilder("โอนเงินเลย","https://analytics.2jds.com/line-liff-starter/confirm_payment.php?order_id=".$order_id),
+                        new UriTemplateActionBuilder("ยืนยันคำสั่งซื้อ","https://analytics.2jds.com/line-liff-starter/confirm_payment.php?order_id=".$order_id),
                         NULL,NULL,NULL,"primary"
                     )
                 )
@@ -196,13 +196,13 @@ function notify_to_customer($msg_pd_detail_arr, $msg_pd_total_arr, $line_userID)
       
         $replyData = new FlexMessageBuilder("Flex",$textReplyMessage);
 
-        $httpClient = new CurlHTTPClient("+R0J6gydIStUSCwmFiMqIYDOMbNs2zIZ85bTr62QaOOVXRqKecQHIc76NWMLri7NdwBqDwvTQxsgm8kV3p0E4C7QxAFwX7p7IOFFnoLjFw+etinMFJC4+QfhrDclxJcbsUgxv+uDJIzRvd+/1YAECwdB04t89/1O/w1cDnyilFU=");
-        $bot = new LINEBot($httpClient, array('channelSecret' => "4b670d359dc2d129a57e8e106e986fe2")); 
+        $httpClient = new CurlHTTPClient(LINE_MESSAGE_ACCESS_TOKEN);
+        $bot = new LINEBot($httpClient, array('channelSecret' => LINE_MESSAGE_CHANNEL_ID)); 
         
         //$textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($replyData);
         $response = $bot->pushMessage($line_userID, $replyData);
         if ($response->isSucceeded()) {
-            echo 'Succeeded!'; 
+            //echo 'Succeeded!'; 
         } 
     }    
 }
@@ -211,8 +211,8 @@ function notify_to_customer_text_msg($msg_notify, $line_userID) {
 
     if (!empty($line_userID)){
 
-        $httpClient = new CurlHTTPClient("+R0J6gydIStUSCwmFiMqIYDOMbNs2zIZ85bTr62QaOOVXRqKecQHIc76NWMLri7NdwBqDwvTQxsgm8kV3p0E4C7QxAFwX7p7IOFFnoLjFw+etinMFJC4+QfhrDclxJcbsUgxv+uDJIzRvd+/1YAECwdB04t89/1O/w1cDnyilFU=");
-        $bot = new LINEBot($httpClient, array('channelSecret' => "4b670d359dc2d129a57e8e106e986fe2")); 
+        $httpClient = new CurlHTTPClient(LINE_MESSAGE_ACCESS_TOKEN);
+        $bot = new LINEBot($httpClient, array('channelSecret' => LINE_MESSAGE_CHANNEL_ID)); 
         
         $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($msg_notify);
         $response = $bot->pushMessage($line_userID, $textMessageBuilder);

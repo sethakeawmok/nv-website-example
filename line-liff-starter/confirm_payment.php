@@ -62,7 +62,7 @@
     <script src="https://2jds.com/analytics/plugins/sb-admin-2/vendor/jquery/jquery.min.js"></script>
     <script src="https://2jds.com/analytics/js/bootstrap.min.js"></script>
     <script src="https://2jds.com/analytics/js/bootstrap-datepicker.js"></script>
-   
+
     <script>
         $(function () {
             $(".datepicker").datepicker({

@@ -211,7 +211,7 @@
                                             <th>เบอร์โทร</th>
                                             <th>ที่อยู่</th>
                                             <!-- <th>วันที่ลงทะเบียน</th> -->
-                                            <th>สถานะการโอน</th>
+                                            <th style="min-width: 200px;">สถานะการโอน</th>
                                         </tr>
                                     </thead>
                                     <!-- <tfoot>
@@ -258,8 +258,8 @@
                                             }
                                             
                                             if ($lbl_status != '-'){
-                                                $lbl_status = '<div class="dropdown mb-4">
-                                                    <button class="btn '.$btn_color.' btn-sm btn_ShowModal_detail_status btn_lbl_status-'.$ID.'" data-orderID="'.$ID.'" data-transfer_status="'.$transfer_status.'" data-current_color="'.$btn_color.'" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                $lbl_status = '<div class="mb-4">
+                                                    <button class="btn '.$btn_color.' btn-sm btn_ShowModal_detail_status btn_lbl_status-'.$ID.'" data-orderID="'.$ID.'" data-transfer_status="'.$transfer_status.'" data-current_color="'.$btn_color.'" type="button" id="dropdownMenuButton">
                                                     '.$lbl_status.' <i class="fas fa-fw fa-cog"></i>
                                                     </button></div>';
                                             }
@@ -426,8 +426,8 @@
                 $('#hid_orderID').val(orderID);
                 $('.md_bank').html(bank_name);
                 $('.md_bank_no').html(bank_no);
-                $('.md_transfer_total').html(tranfer_dt + ' บาท');
-                $('.md_transfer_dt').html(tranfer_amount); 
+                $('.md_transfer_total').html(tranfer_amount + ' บาท');
+                $('.md_transfer_dt').html(tranfer_dt); 
                 
                 $('.container-ems_no').css("display", "none");
                 if (transfer_status == 'complate'){ 
@@ -442,6 +442,7 @@
                 }
                 
                 jQuery('#detail_status_Modal').modal();
+                $('#confirm_transfer_status').children('i').removeClass("fa fa-check"); 
 
             });
 
@@ -459,65 +460,64 @@
             jQuery("#confirm_transfer_status").on("click", function(e) {
                 e.preventDefault();
                 
+                var $this = $(this);
                 var orderID = $('#hid_orderID').val();
-                var payment_status = $('#md_transfer_status').val();  
+                var payment_status = $('#md_transfer_status').val(); 
+                var ems_no = $('#ems_no').val();  
                 var accept_line_notify = ''; 
                 if ($('#accept_line_notify').is(":checked")) {
                     accept_line_notify = 'yes';
                 }
-                
-                if (confirm("คุณแน่ใจแล้ว ที่จะเปลียนสถานะการโอนเงิน?")) {
-                    update_payment_status(payment_status, orderID, accept_line_notify);
+               
+                if ( confirm("คุณแน่ใจแล้ว ที่จะเปลียนสถานะการโอนเงิน?") ) { 
+
+                    var lbl_status = '';
+                    var btn_color = '';
+                    var btn_color = '';
+                    var current_color = $('.btn_lbl_status-'+orderID).attr('data-current_color');
+                    
+                    if (payment_status == 'waiting'){
+                        lbl_status = 'ตรวจสอบการโอนเงิน';
+                        btn_color = 'btn-danger';
+                    } else if (payment_status == 'complate'){
+                        lbl_status = 'โอนเงินแล้ว';
+                        btn_color = 'btn-success';
+                    } else if (payment_status == 'not_transfer'){
+                        lbl_status = 'ยังไม่โอนเงิน';
+                        btn_color = 'btn-warning';
+                    }  
+
+                    jQuery.ajax({
+                        type: 'post',
+                        url: '/line-liff-starter/controller/users_controller.php',
+                        dataType: 'json',
+                        data: {
+                                'action': 'update_payment_status',
+                                'payment_status': payment_status,
+                                'ems_no': ems_no,
+                                'orderID': orderID,
+                                'accept_line_notify': accept_line_notify
+                        },
+                        beforeSend: function () {
+                            $this.prepend('<i class="fa-left fa fa-spin fa-spinner"></i> ');
+                        },
+                        success: function (data) {
+                        
+                            if (data.success) {
+                                $this.children('i').removeClass("fa fa-spin fa-spinner").addClass("fa fa-check"); 
+                                jQuery('.btn_lbl_status-'+orderID).html(lbl_status);
+                                jQuery('.btn_lbl_status-'+orderID).removeClass(current_color).addClass(btn_color);    
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // var err = eval("(" + xhr.responseText + ")");
+                            // console.log(err.Message);
+                        } 
+                    });
                 }
 
             });
 
-            function update_payment_status(payment_status, orderID, accept_line_notify) {
-
-                var lbl_status = '';
-                var btn_color = '';
-                var btn_color = '';
-                var current_color = $('.btn_lbl_status-'+orderID).attr('data-current_color');
-                
-                if (payment_status == 'waiting'){
-                    lbl_status = 'ตรวจสอบการโอนเงิน';
-                    btn_color = 'btn-danger';
-                } else if (payment_status == 'complate'){
-                    lbl_status = 'โอนเงินแล้ว';
-                    btn_color = 'btn-success';
-                } else if (payment_status == 'not_transfer'){
-                    lbl_status = 'ยังไม่โอนเงิน';
-                    btn_color = 'btn-warning';
-                }  
-
-                jQuery.ajax({
-                    type: 'post',
-                    url: '/line-liff-starter/controller/users_controller.php',
-                    dataType: 'json',
-                    data: {
-                            'action': 'update_payment_status',
-                            'payment_status': payment_status,
-                            'orderID': orderID,
-                            'accept_line_notify': accept_line_notify
-                    },
-                    beforeSend: function () {
-                        //jQuery('#sel_floorplan').html('<option value="" selected>กำลังโหลด...</option>');
-                    },
-                    success: function (data) {
-                       
-                        if (data.success) {
-                            jQuery('.btn_lbl_status-'+orderID).html(lbl_status);
-
-                            jQuery('.btn_lbl_status-'+orderID).removeClass(current_color).addClass(btn_color);    
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        // var err = eval("(" + xhr.responseText + ")");
-                        // console.log(err.Message);
-                    } 
-                });
-            
-            }
         });     
     </script> 
 

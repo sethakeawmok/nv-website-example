@@ -195,7 +195,8 @@
                                         <div class="form-group">
                                             <input type="hidden" id="hid_order_id" name="hid_order_id"
                                                 value="<?php echo $order_id; ?>">
-                                            <input type="submit" class="form-control" name="submit_form" value="confrim_order"
+                                            <input type="hidden" class="form-control" name="submit_form" value="confrim_order">
+                                            <input type="submit" class="form-control" name="btn_submit_form" value="ยืนยันรายการสินค้า"
                                                 style="background-color: #224abe;color: white;">
                                         </div>
                                     </form>

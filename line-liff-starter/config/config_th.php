@@ -23,4 +23,14 @@
 	define("Price", "ราคา");
 	define("unit", "หน่วยนับ");
 	define("Stock", "จำนวน");
+
+
+	/// การตั้งค่าเกี่ยวกับ bot ใน LINE Messaging API
+	define('LINE_MESSAGE_CHANNEL_ID','1653606813');
+	define('LINE_MESSAGE_CHANNEL_SECRET','bb9a0b751c97bc0923221288f44b65a0');
+	define('LINE_MESSAGE_ACCESS_TOKEN','YKD7Dy6zAddNcdE/3CnpfM7lSmnFfp8YZ1Py7nH+mjxv3GbY9ULXaMuJ5EUASRIoXTNg4b1nbNWar8BPz4hsXw8XDiUlPP6CmDRmWBDUMiTI0E3pH33j7dRWKrkp9Kad11cdmFTm+tBDuG5e8xFz9gdB04t89/1O/w1cDnyilFU=');
+
+	/// การตั้งค่าเกี่ยวกับ LINE NOTIFY
+	define('ADMIN_LINE_NOTIFY_TOKEN_ID','ZzieAFii426ERgJHQvOu1l9XDPUCcD7c1TjlI94ajTp');
+
 ?>

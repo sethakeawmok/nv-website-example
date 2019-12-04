@@ -138,10 +138,9 @@
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <!-- <div class="col-lg-6 d-none d-lg-block bg-password-image"></div> -->
-                            <div class="col-lg-6 d-none d-lg-block"></div>
+                            <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
                             <div class="col-lg-6">
-                                <div class="p-3">
+                                <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">ข้อมูลลูกค้า</h1>
                                         <p class="mb-4"></p>
@@ -163,40 +162,7 @@
                                         </div>
                                         <div class="form-group">
                                             <textarea  id="Address" name="Address" class="form-control"
-                                                placeholder="ที่อยู่ของคุณ เช่น เลขที่ หมู่ อาคาร ซอย ถนน"></textarea>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <select class="form-control" name="sel_province" id="sel_province" required>
-                                                <option class="" value="" selected>---เลือกจังหวัด---</option>
-                                                <?php                                             
-                                                    
-                                                    $data = $cls->getData('province','','PROVINCE_NAME ASC'); 
-                                                    foreach($data as $row){
-                                                        $PROVINCE_ID = isset($row['PROVINCE_ID']) ? $row['PROVINCE_ID'] : "";
-                                                        $PROVINCE_NAME = isset($row['PROVINCE_NAME']) ? $row['PROVINCE_NAME'] : "";
-                                                        echo '<option value="'.$PROVINCE_ID.'">'.$PROVINCE_NAME.'</option>';
-                                                       
-                                                    }                                      
-                                                                                                                                  
-                                                ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <select class="form-control" name="sel_amphur" id="sel_amphur" required> 
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <select class="form-control" name="sel_district" id="sel_district" required> 
-                                            </select>
-                                            <input type="hidden" id="hid_respone_district" name="hid_respone_district" value="">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="text" id="postcode" name="postcode" class="form-control"
-                                                placeholder="รหัสไปรษณีย์" required>
+                                                placeholder="ที่อยู่ของคุณ"></textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -235,7 +201,6 @@
     <!-- Custom scripts for all pages-->
     <script src="https://2jds.com/analytics//plugins/sb-admin-2/js/sb-admin-2.min.js"></script>
 
-    <script src="<?php path_root ?>assets/js/helper.js"></script>
 
 </body>
 
