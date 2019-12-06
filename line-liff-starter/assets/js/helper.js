@@ -1,7 +1,5 @@
 jQuery(function() {
 
-    var postcode;
-
     jQuery("#sel_province").on("change", function(e) {
         e.preventDefault();
         
@@ -83,6 +81,46 @@ jQuery(function() {
                 // console.log(err.Message);
             } 
         });
+        
+
+    });
+
+    jQuery(".delete-product").on("click", function(e) {
+        e.preventDefault();
+        
+        var $this = $(this);
+        var pdID = $(this).attr('data-pdID');
+        
+        if (confirm("คุณแน่ใจหรือว่าจะลบสินค้านี้ ?")){
+
+            jQuery.ajax({
+                type: 'post',
+                url: '/line-liff-starter/controller/products_controller.php',
+                dataType: 'json',
+                data: {
+                        'action': 'delete_product',
+                        'pdID': pdID 
+                },
+                beforeSend: function () {
+                    //jQuery('#sel_district').html('<option class="" value="" selected>กำลังโหลด...</option>');
+                   
+                },
+                success: function (data) {
+                    //window.location.reload(); 
+                    
+                    if (data.success){
+                        jQuery('.tr-container-'+pdID).css('display','none');
+                    }
+                   
+                  
+                },
+                error: function (xhr, status, error) {
+                    // var err = eval("(" + xhr.responseText + ")");
+                    // console.log(err.Message);
+                } 
+            });
+
+        }
         
 
     });
